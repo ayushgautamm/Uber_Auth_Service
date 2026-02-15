@@ -25,7 +25,7 @@ public class JwtService implements CommandLineRunner {
 
     //This is a method creates a new JWT token for us based on payload
 
-    private String createToken(Map<String, Object> payload,String email) {
+    public String createToken(Map<String, Object> payload,String email) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expiry*1000L);
         SecretKey key = Keys.hmacShaKeyFor(SECRET.getBytes());
@@ -37,7 +37,7 @@ public class JwtService implements CommandLineRunner {
                 .signWith(getSecretKey())
                 .compact();
     }
-    private Claims extractAllpayLoads(String token) {
+    public Claims extractAllpayLoads(String token) {
         return Jwts
                 .parser()
                 .setSigningKey(getSecretKey())
@@ -46,15 +46,17 @@ public class JwtService implements CommandLineRunner {
 
     }
 
-    private <T> T extractClaim(String token , Function<Claims, T> claimsResolver) {
+    public <T> T extractClaim(String token , Function<Claims, T> claimsResolver) {
           final Claims claims = extractAllpayLoads(token);
           return claimsResolver.apply(claims);
     }
-
-    private  Date extractExpiration(String token) {
+    public String createToken(String email) {
+        return createToken(new HashMap<>(), email);
+    }
+   public  Date extractExpiration(String token) {
         return  extractClaim(token , Claims ::getExpiration);
     }
-    private String extractEmai(String token){
+    public String extractEmai(String token){
         return extractClaim(token , Claims ::getSubject);
     }
     public boolean validateToken(String token , String email) {
@@ -62,11 +64,11 @@ public class JwtService implements CommandLineRunner {
         return (userEmailFetchedFromToken.equals(email) && !isTokenExpired(token));
 
     }
-    private boolean isTokenExpired(String token) {
+    public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
-    private Key getSecretKey() {
+    public Key getSecretKey() {
         return Keys.hmacShaKeyFor(SECRET.getBytes());
     }
     @Override

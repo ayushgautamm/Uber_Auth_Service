@@ -3,6 +3,9 @@ package com.example.uberserviceauth.service;
 import com.example.uberserviceauth.helpers.AuthPassengerDetails;
 import com.example.uberserviceauth.models.Passenger;
 import com.example.uberserviceauth.repository.PassengerRespository;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,11 +18,9 @@ import java.util.Optional;
  */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-
+    @Autowired
     private PassengerRespository passengerRespository;
-    public UserDetailsServiceImpl(PassengerRespository passengerRespository) {
-        this.passengerRespository = passengerRespository;
-    }
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<Passenger> passenger = passengerRespository.findPassengerByEmail(email);

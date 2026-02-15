@@ -1,6 +1,8 @@
 package com.example.uberserviceauth.helpers;
 
 import com.example.uberserviceauth.models.Passenger;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -8,6 +10,8 @@ import java.util.Collection;
 import java.util.List;
 //why we need this clssa?
 // Because Spring Security works on UserDetails polymorphic type for auth
+@Getter
+@Setter
 public class AuthPassengerDetails extends Passenger implements UserDetails {
 
     private String username;
@@ -23,10 +27,14 @@ public class AuthPassengerDetails extends Passenger implements UserDetails {
     }
 
     @Override
+
     public String getUsername() {
-        return "";
+        return this.username;
     }
 
+   public  String getPassword() {
+        return this.password;
+   }
     @Override
     public boolean isAccountNonExpired() {
         return UserDetails.super.isAccountNonExpired();
